@@ -1,0 +1,113 @@
+---
+title: "Clase 2 01/24"
+format: html
+editor: visual
+---
+
+# *Clase 2*
+
+## Quarto
+
+Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
+
+## Running Code
+
+When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
+
+```{r}
+1 + 1
+```
+
+You can add options to executable code like this
+
+```{r}
+#| echo: false
+2 * 2
+```
+
+The `echo: false` option disables the printing of code (only output is displayed).
+
+## Cargar codigo en el documento
+
+Para cargar nuevo chunk de codigo: ctrl + alt + i
+
+## pkgs
+
+```{r}
+library(tidyverse)
+library(fpp3)
+```
+
+Formato para importar o escoger cosas de una paqueteria:
+
+stats::filter()
+
+readxl::read_excel()
+
+tibble = DataFrame tsibble = DataFrame de Series de Tiempo no se pueden repetir fechas a menos de que halla keys
+
+```{r}
+mpg
+tourism
+```
+
+en tourisn, A tsibble:24,320 x 5 \[1Q\] 1Q es la periodicidad tenemos datos cada trimestre
+
+Si tewnemos mas de una serie de tiempo se necesita el key Key:Region, State, Purpose \[304\] 304 son las mezclas de las columnas keys que hay
+
+Ver Help windoow de lo que estoy usando
+
+```{r}
+?tourism
+```
+
+```{r}
+distinct(tourism, State)
+```
+
+```{r}
+distinct(filter(tourism, State == "Victoria", Region == "Lakes"))
+```
+
+El codigo existe / Por default R lo lee de adentro a afura, en lo siguiente haria 1 filter 2astibble 3 groupby 4 summarize
+
+```{r}
+summarise(group_by(as_tibble(filter(tourism, State == "Victoria", Region == "Lakes")),Purpose),media = mean(Trips))
+```
+
+Existe Pipe para hacerlo en orden escrito \|\> significa "Luego" por estuctura se pone enter
+
+```{r}
+tourism |>
+  filter(State == "Victoria", Region == "Lakes") |>
+  as_tibble() |>
+  group_by(Purpose) |>
+  summarise(media = mean(Trips))
+```
+
+Graficar series de tiempo
+
+```{r}
+tourism |>
+  filter(State == "Victoria", Region == "Lakes") |>
+  autoplot(Trips)
+```
+
+Se crea la grafica en capas, o facetas
+
+```{r}
+tourism |>
+  filter(State == "Victoria", Region == "Lakes") |>
+  autoplot(Trips) +
+  facet_wrap(vars(Purpose))
+```
+
+Aqui cambiamos la escala en y, por las proporciones de cada una y quitamos las leyendas repetidas
+
+```{r}
+tourism |>
+  filter(State == "Victoria", Region == "Lakes") |>
+  autoplot(Trips) +
+  facet_wrap(vars(Purpose), scale = "free_y") +
+  theme(legend.position = "none")
+```
