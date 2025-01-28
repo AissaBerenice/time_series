@@ -1,2 +1,2 @@
 # time_series
-Portafolio de Notebooks del Series de Tiempo- Agosto 2024
+Portafolio de Notebooks del Series de Tiempo- Primavera 2024
